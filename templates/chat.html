@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Chat Room - Welcome {{ nickname }}</h2>
+
+        
+        <ul id="messages"></ul>
+        <!-- Chat Form -->
+        <form id="chat-form">
+            <input type="text" id="message" placeholder="Type a message" autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+
+        
+        <!-- Logout Button -->
+        <button id="logoutButton">Logout</button>
+    </div>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        document.getElementById("chat-form").onsubmit = function (e) {
+            e.preventDefault();
+            var msg = document.getElementById("message").value;
+            socket.send(msg);
+            document.getElementById("message").value = '';
+        };
+
+        socket.on('message', function (msg) {
+            var li = document.createElement("li");
+            li.textContent = msg;
+            document.getElementById("messages").appendChild(li);
+        });
+
+        document.getElementById("logoutButton").addEventListener("click", function () {
+            const goodbyeMessage = prompt("Enter a goodbye message before logging out:");
+            if (goodbyeMessage !== null) {
+                socket.send(`BYEBYE ${goodbyeMessage}`);
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        });
+    </script>
+</body>
+</html>
