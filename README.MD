@@ -83,5 +83,4 @@ The application uses Flask-SocketIO to handle real-time messaging. Messages are 
 - **Goodbye Message**: When a user logs out, their goodbye message is broadcast to all users.
 
 ## License
-
-This project is licensed under the MIT License. Feel free to use and modify it as needed.
+This project is licensed under the Apache License 2.0.
